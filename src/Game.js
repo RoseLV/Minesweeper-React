@@ -130,7 +130,7 @@ export default class Game extends React.Component {
   }
 
 
-  floodFill = (minesArray, x, y) => {
+  floodFill (minesArray, x, y) {
     var revealed = 0;
     var cols = LEVELS[this.state.level].rows;
     var rows = LEVELS[this.state.level].cols;
@@ -151,7 +151,7 @@ export default class Game extends React.Component {
     return revealed;
   }
 
-  reveal = (minesArray, i, j) => {
+  reveal (minesArray, i, j) {
     var revealed = 1; // firstclick
     var cell = minesArray[i][j];
     cell.isRevealed = true;
@@ -161,7 +161,7 @@ export default class Game extends React.Component {
     return revealed;
   }
 
-  handleOnClick = (i, j) => {
+  handleOnClick (i, j) {
     var cols = LEVELS[this.state.level].rows;
     var rows = LEVELS[this.state.level].cols;
     var mines = LEVELS[this.state.level].mines;
@@ -203,7 +203,7 @@ export default class Game extends React.Component {
     }
   }
 
-  handleRightClick = (i, j) => {
+  handleRightClick (i, j) {
     const { rows, cols, mines } = LEVELS[this.state.level];
     // var rows = LEVELS[this.state.level].rows;
     // var cols = LEVELS[this.state.level].cols;
