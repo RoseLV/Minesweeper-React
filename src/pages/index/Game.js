@@ -7,7 +7,7 @@ const LEVELS = {
   easy: {
     rows: 9,
     cols: 9,
-    mines: 1,
+    mines: 10,
   },
   medium: {
     rows: 13,
