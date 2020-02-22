@@ -1,23 +1,8 @@
 import React from 'react';
-import flag from './assets/flag.png'
-import mine from './assets/mine.png'
-import mine1 from './assets/mine-1.png'
-import mine2 from './assets/mine-2.png'
-import mine3 from './assets/mine-3.png'
-import mine4 from './assets/mine-4.png'
-import mine5 from './assets/mine-5.png'
-import rev_empty from './assets/rev_empty.png'
-import unrev_cell from './assets/unrev_cell.png'
-
+import ReactDOM from 'react-dom';
 import './index.css';
 
-const minesMap = {
-  'mine1': mine1,
-  'mine2': mine2,
-  'mine3': mine3,
-  'mine4': mine4,
-  'mine5': mine5
-}
+// Square 是和 cell一样的；
 export default class Square extends React.Component {
   /*  this.props.data = {
       hasMine : false,
@@ -29,22 +14,21 @@ export default class Square extends React.Component {
 
   this.props.onClick(){}
   this.props.onRightClick()*/
-
   // turn off right click menu
   render() {
-    let value = unrev_cell;
+    let value = '';
 
     if (!this.props.data.isRevealed && this.props.data.isFlag) {
-      value = flag;
+      value = 'F';
     }
 
     if (this.props.data.isRevealed) {
-      value = minesMap[`mine${this.props.data.count}`];
+      value = this.props.data.count;
       if (this.props.data.isMine) {
-        value = mine;
+        value = '*';
       }
       if(this.props.data.count===0){
-        value = rev_empty;
+        value = '';
       }
    }
 
@@ -54,10 +38,11 @@ export default class Square extends React.Component {
   }
 
     return (
+      // why I cant have div here
       <button className={className} onClick={this.props.onClick} onContextMenu={this.props.onRightClick}>
-        {/* {value} */}
-        <img src={value} alt='cell'/>
+        {value}
       </button>
+
     );
   }
 }

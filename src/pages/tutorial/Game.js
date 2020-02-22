@@ -1,6 +1,6 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Board from './Board.js';
-import { Modal } from '../../components/modal/App'
 import './index.css';
 
 const LEVELS = {
@@ -21,12 +21,15 @@ const LEVELS = {
   }
 }
 
+// var easy = LEVELS.easy; == ar easy = LEVELS["easy"];
+// easy.rows = 10, easy.cols = 10 and easy.mines = 10
+
 export default class Game extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       // selected level, references LEVELS object above
-      // possible values are "easy", "medium", "difficult"
+      // possible values are "easy", "medium", ""
       level: null,
 
       // until level is selected, we won't know the number
@@ -39,9 +42,7 @@ export default class Game extends React.Component {
       // number of squares revealed
       inGame: false,
       numRevealed: 0,
-
-      isModalShow: false,
-      modalMsg: ''
+      // time: ''
     };
   }
 
@@ -59,19 +60,18 @@ export default class Game extends React.Component {
       inGame = true;
     }
     
-    if (difficulty === null) {
-      this.setState({
-        isModalShow: false,
-        modalMsg: ''
-      })
-    }
     
+    // console.log('state', this.state);
     this.setState({
       level: difficulty,
       minesArray: minesArray,
       minesLeft: minesLeft,
       numRevealed: 0, // <- was missing
       inGame: inGame,
+      // time: new Date()
+    // }, ()=>{
+      // debugger;
+      // console.log('state', this.state);
     });
     
   }
@@ -181,38 +181,36 @@ export default class Game extends React.Component {
     var cell = newMinesArray[i][j];
     var numRevealed = this.state.numRevealed;
 
-    if(this.state.inGame) {
-      
-      if(cell.isRevealed) {
+    if(this.state.inGame){
+      if(cell.isRevealed){
         return;
       }
-
-      if(!cell.isMine) {
+      if(!cell.isMine){
         cell.isRevealed = true;
-        numRevealed += this.reveal(newMinesArray, i, j); 
+        numRevealed += this.reveal(newMinesArray, i, j); //
         this.setState({
+          ...this.state,
           minesArray: newMinesArray,
           numRevealed: numRevealed,
         });
-      } 
-
-      else {
-        // alert('Game Over');
+      } else {
+        // wrong: don't set state like this only use this.setState();
+        // this.state.inGame = false;
+        // this.state.numRevealed = 0;
+        // wrong: don't set state like this only use this.setState();
+        alert('Game Over');
+        // cell.revealAll();   // cell cannot revealAl(), which return is an array;
         this.setState({
           inGame: false,
           minesArray: this.revealAll(), // revealAll() returns a copy of minesArray;
-          isModalShow: true,
-          modalMsg: 'Game Over'
         });
       }
     }
 
     if(this.state.inGame && this.state.minesLeft === 0 && (numRevealed + mines)===rows*cols){
-      // alert('Game Win');
+      alert('Game Win');
       this.setState({
         inGame: false,
-        isModalShow: true,
-        modalMsg: 'Game Win'
       });
     }
   }
@@ -233,6 +231,7 @@ export default class Game extends React.Component {
         cell.isFlag = true;
         minesLeft--;
         this.setState({
+          ...this.state,
           minesArray: newMinesArray,
           minesLeft: minesLeft   // same as just minesLeft
         });
@@ -240,17 +239,19 @@ export default class Game extends React.Component {
         cell.isFlag = false;
         minesLeft++;
         this.setState({
+          ...this.state,
           minesArray: newMinesArray,
+          //this.state.minesLeft++ // CANNOT change state like this!!
           minesLeft
         });
       }
 
       if(this.state.inGame && minesLeft === 0 && (this.state.numRevealed + mines)===rows*cols){
-        // alert('Game Win');
+        alert('Game Win');
+        //WRONG: this.state.inGame = false;
+        //RIGHT:
         this.setState({
           inGame: false,
-          isModalShow: true,
-          modalMsg: 'Game Win'
         });
       }
     }
@@ -263,9 +264,9 @@ export default class Game extends React.Component {
     if (this.state.level === null) {
       return (
         <div className="game">
-          <button className="game_level" onClick={() => this.startLevel("easy")}>Easy</button>
-          <button className="game_level" onClick={() => this.startLevel("medium")}>Medium</button>
-          <button className="game_level" onClick={() => this.startLevel("hard")}>Hard</button>
+          <button onClick={() => this.startLevel("easy")}>Easy</button>
+          <button onClick={() => this.startLevel("medium")}>Medium</button>
+          <button onClick={() => this.startLevel("hard")}>Hard</button>
         </div>
       );
     }
@@ -276,30 +277,24 @@ export default class Game extends React.Component {
 
   
     return(
-      <div className="game">
-        
-        {
-          this.state.isModalShow 
-          ?
-          <Modal msg={this.state.modalMsg}/>
-          :
-          null
-        }
-        <div className="game_panel">
-          <p>Mines left:  {this.state.minesLeft} </p>
-          <button className="game_level" onClick={() => this.startLevel(null)}>Exit</button>
-          <p>Revealed:  {this.state.numRevealed} </p>
+      <div>
+        <button onClick={() => this.startLevel(null)}>Exit</button>
+        <div className="game">
+          <div className="game-board">
+            <Board className="afterClick"
+              rows={rows}
+              cols={cols}
+              reveal={this.handleOnClick.bind(this)}// this.onClick() -> send the result of th function;
+                     // send the function itself
+              flag={this.handleRightClick.bind(this)}
+              minesArray = {this.state.minesArray}
+              isRevealed = {this.state.isRevealed}
+            />
+          </div>
         </div>
-        
-        <div className="game_board">
-          <Board className="afterClick"
-            rows={rows}
-            cols={cols}
-            reveal={this.handleOnClick.bind(this)} // this.onClick() -> send the result of the function;
-            flag={this.handleRightClick.bind(this)}
-            minesArray = {this.state.minesArray}
-            isRevealed = {this.state.isRevealed}
-          />
+        <div>
+          <p>Mines left:  {this.state.minesLeft} </p>
+          <p>Revealed:  {this.state.numRevealed} </p>
         </div>
       </div>
     );

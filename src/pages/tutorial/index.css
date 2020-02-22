@@ -40,12 +40,6 @@ ol, ul {
   width: 34px;
 }
 
-img {
-  height: 34px;
-  width: 34px;
-
-}
-
 .square:focus {
   outline: none;
 }
@@ -56,33 +50,11 @@ img {
 
 .game {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative
-}
-
-.game_panel {
-  display: flex;
-  width: 500px;
-  justify-content: space-between;
-}
-
-.game_board {
-  /* width: 500px; */
-  display: flex;
-  justify-content: center;
-}
-
-.game_level {
-  width: 100px;
-  margin-bottom: 20px;
+  flex-direction: row;
 }
 
 .game-info {
   margin-left: 20px;
 }
 
-.btn-btn {
-  border-radius: 50%;
-}
+.btn-btn {border-radius: 50%;}
