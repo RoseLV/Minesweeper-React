@@ -7,7 +7,7 @@ const LEVELS = {
   easy: {
     rows: 9,
     cols: 9,
-    mines: 10,
+    mines: 1,
   },
   medium: {
     rows: 13,
@@ -263,9 +263,9 @@ export default class Game extends React.Component {
     if (this.state.level === null) {
       return (
         <div className="game">
-          <button className="game_level" onClick={() => this.startLevel("easy")}>Easy</button>
-          <button className="game_level" onClick={() => this.startLevel("medium")}>Medium</button>
-          <button className="game_level" onClick={() => this.startLevel("hard")}>Hard</button>
+          <button type="button" className="game_level btn btn-success" onClick={() => this.startLevel("easy")}>Easy</button>
+          <button type="button" className="game_level btn btn-info" onClick={() => this.startLevel("medium")}>Medium</button>
+          <button type="button" className="game_level btn btn-danger" onClick={() => this.startLevel("hard")}>Hard</button>
         </div>
       );
     }
@@ -287,7 +287,7 @@ export default class Game extends React.Component {
         }
         <div className="game_panel">
           <p>Mines left:  {this.state.minesLeft} </p>
-          <button className="game_level" onClick={() => this.startLevel(null)}>Exit</button>
+          <button type="button" className="game_level btn btn-dark" onClick={() => this.startLevel(null)}>Exit</button>
           <p>Revealed:  {this.state.numRevealed} </p>
         </div>
         
