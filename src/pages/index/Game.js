@@ -7,7 +7,7 @@ const LEVELS = {
   easy: {
     rows: 9,
     cols: 9,
-    mines: 10,
+    mines: 1,
   },
   medium: {
     rows: 13,
@@ -57,12 +57,16 @@ export default class Game extends React.Component {
       minesArray = this.setMineArray(LEVELS[difficulty])
       minesLeft = LEVELS[difficulty].mines;
       inGame = true;
+      this.setState({
+        isModalShow: false,
+        // modalMsg: ''
+      })
     }
     
     if (difficulty === null) {
       this.setState({
         isModalShow: false,
-        modalMsg: ''
+        // modalMsg: ''
       })
     }
     
@@ -279,7 +283,7 @@ export default class Game extends React.Component {
       <div className="game">
         
         {
-          this.state.isModalShow 
+          this.state.isModalShow
           ?
           <Modal msg={this.state.modalMsg}/>
           :
@@ -287,6 +291,7 @@ export default class Game extends React.Component {
         }
         <div className="game_panel">
           <p>Mines left:  {this.state.minesLeft} </p>
+          <button type="button" className="game_level btn btn-dark" onClick={() => this.startLevel(this.state.level)}>Restart</button>
           <button type="button" className="game_level btn btn-dark" onClick={() => this.startLevel(null)}>Exit</button>
           <p>Revealed:  {this.state.numRevealed} </p>
         </div>
